@@ -1,0 +1,15 @@
+.NoticeDetail .row {
+    display: flex;
+    padding: 20px;
+    height: 30px;
+    text-align: left;
+  }
+  
+  .NoticeDetail .left {
+    font-weight: bold;
+    flex: 25%
+  }
+  
+  .NoticeDetail .right {
+    flex: 75%;
+  }

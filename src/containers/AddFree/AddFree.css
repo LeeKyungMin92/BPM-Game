@@ -1,0 +1,41 @@
+.AddFree {
+    width: 80%;
+    margin: 20px auto;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    text-align: center;
+  }
+  
+  .AddFree label {
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .AddFree input,
+  .AddFree textarea {
+    display: block;
+    width: 80%;
+    box-sizing: border-box;
+    border: 1px solid black;
+    outline: none;
+    font: inherit;
+    margin: auto;
+  }
+  
+  .AddFree button {
+    margin: 5px 0;
+    padding: 10px;
+    font: inherit;
+    border: 1px solid #58d0ff;
+    background-color: transparent;
+    color: #58d0ff;
+    cursor: pointer;
+  }
+  
+  .AddFree button:hover,
+  .AddFree button:active {
+    color: white;
+    background-color: #58d0ff;
+  }

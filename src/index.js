@@ -1,13 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import './index.css';
 import App from './App';
+import postReducer from './store/reducers/post';
 import reportWebVitals from './reportWebVitals';
 
+const rootReducer = combineReducers({
+  pt: postReducer,
+});
+
+const store = createStore(rootReducer);
+
+// Error Reporter for Middleware
+const logger = store => next => action => {
+  try {
+    return next(action);
+  } catch(err) {
+    console.error('Catched error', err, action);
+    throw(err);
+  } 
+}
+
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
