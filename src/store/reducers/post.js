@@ -6,31 +6,34 @@ const initialState = {
     { id: 2, title: 'Rules', content: 'Swing your body round and round.' },
     { id: 3, title: 'Today\'s dinner', content: 'Today\'s dinner is chicken.' },
   ],
+  nextNotice: 4,
   freePosts: [
     { id: 1, title: '( ՞⌓°⎞', content: 'a?' },
     { id: 2, title: 'INN', content: 'INN' },
     { id: 3, title: 'I want to travel overseas', content: 'But I can\'t.' },
   ],
-  selectedNotice: null,
-  selectedFree: null,
+  nextFree: 4,
+  selectedPost: null,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ADD_POST_NOTICE: 
       const newNotice = {
-        id: state.noticePosts.length + 1,
+        id: state.nextNotice,
         title: action.title,
         content: action.content,
       };
+      state.nextNotice += 1;
       return { ...state, noticePosts: state.noticePosts.concat(newNotice) };
     
     case actionTypes.ADD_POST_FREE: 
       const newFree = {
-        id: state.freePosts.length + 1,
+        id: state.nextFree,
         title: action.title,
         content: action.content,
       };
+      state.nextFree += 1;
       return { ...state, freePosts: state.freePosts.concat(newFree) };
     
     case actionTypes.DELETE_POST_NOTICE: 
@@ -42,12 +45,12 @@ const reducer = (state = initialState, action) => {
       return { ...state, freePosts: deletedFree };
 
     case actionTypes.GET_POST_NOTICE: 
-      const targetNotice = { ...state.noticePosts[action.targetID - 1] };
-      return { ...state, selectedNotice: targetNotice };
+      const targetNotice = { ...state.noticePosts.find((post) => post.id == action.targetID) };
+      return { ...state, selectedPost: targetNotice };
 
     case actionTypes.GET_POST_FREE: 
-      const targetFree = { ...state.freePosts[action.targetID - 1] };
-      return { ...state, selectedFree: targetFree };
+      const targetFree = { ...state.freePosts.find((post) => post.id == action.targetID) };
+      return { ...state, selectedPost: targetFree };
 
     default:
       break;

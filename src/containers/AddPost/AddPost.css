@@ -1,4 +1,4 @@
-.AddFree {
+.AddPost {
     width: 80%;
     margin: 20px auto;
     border: 1px solid #eee;
@@ -6,15 +6,15 @@
     text-align: center;
   }
   
-  .AddFree label {
+  .AddPost label {
     display: block;
     margin: 10px auto;
     text-align: center;
     font-weight: bold;
   }
   
-  .AddFree input,
-  .AddFree textarea {
+  .AddPost input,
+  .AddPost textarea {
     display: block;
     width: 80%;
     box-sizing: border-box;
@@ -24,7 +24,7 @@
     margin: auto;
   }
   
-  .AddFree button {
+  .AddPost button {
     margin: 5px 0;
     padding: 10px;
     font: inherit;
@@ -34,8 +34,8 @@
     cursor: pointer;
   }
   
-  .AddFree button:hover,
-  .AddFree button:active {
+  .AddPost button:hover,
+  .AddPost button:active {
     color: white;
     background-color: #58d0ff;
   }

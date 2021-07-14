@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import './AddFree.css';
+import './AddPost.css';
 import * as actionTypes from '../../store/actions/actionTypes';
 
-const mapDispatchToProps = dispatch => {
-    return {
+const mapDispatchToProps = (dispatch, ownProps) => {
+  switch (ownProps.title) {
+    case "Notice": 
+      return {
+        onStorePost: (title, content) => dispatch({ type: actionTypes.ADD_POST_NOTICE, title: title, content: content})
+      };
+      
+    case "Free": 
+      return {
         onStorePost: (title, content) => dispatch({ type: actionTypes.ADD_POST_FREE, title: title, content: content})
-    };
+      };
+            
+    default: 
+        break;
+  }
 };
 
-class AddFree extends Component {
+class AddPost extends Component {
     state = {
         title: '',
         content: '',
@@ -21,16 +32,20 @@ class AddFree extends Component {
         this.props.onStorePost(this.state.title, this.state.content);
         alert('Submitted!');
         this.setState({submitted: true});
-        this.props.history.push('/free');
     }
 
     render() {
         if(this.state.submitted) {
-            return <Redirect to='/free' />;
+          let pathname = window.location.pathname;
+          if (pathname.charAt(pathname.length - 1) === '/') {
+            return <Redirect to={pathname.slice(0, -5)} />;
+          } else {
+            return <Redirect to={pathname.slice(0, -4)} />;
+          }
         }
         return (
-            <div className='AddFree'>
-                <h1>Add a Free</h1>
+            <div className='AddPost'>
+                <h1>Add a {this.props.title}</h1>
                 <label>Title</label>
                 <input type='text' value={this.state.title} onChange={(event) => this.setState({title: event.target.value})} />
                 <label>Content</label>
@@ -40,4 +55,4 @@ class AddFree extends Component {
         );
     }
 }
-export default connect(null, mapDispatchToProps)(AddFree);
+export default connect(null, mapDispatchToProps)(AddPost);
