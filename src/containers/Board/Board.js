@@ -12,12 +12,9 @@ class Board extends Component {
   }
   
   clickPostHandler = (pt) => {
-    let pathname = window.location.pathname;
-    if (pathname.charAt(pathname.length - 1) === '/') {
-      this.props.history.push(pathname + pt.id);
-    } else {
-      this.props.history.push(pathname + '/' + pt.id);
-    }
+    let boardtype = '' + this.props.boardType;
+    boardtype = boardtype.toString().toLowerCase();
+    this.props.history.push(boardtype + '/' + pt.id);
   }
 
   render() {
@@ -31,10 +28,10 @@ class Board extends Component {
 
     return (
       <div className='Board'>
-        <div className='title'>{this.props.title}</div>
+        <div className='boardType'>{this.props.boardType}</div>
         <div className='Posts'>{posts}</div>
         <div className='add'>
-          <NavLink to={window.location.pathname + '/add'} exact>Add {this.props.title}</NavLink>
+          <NavLink to={window.location.pathname + '/add'} exact>Add {this.props.boardType}</NavLink>
         </div>
         <div className='home'>
           <NavLink to='/home' exact>Back</NavLink>
@@ -45,35 +42,18 @@ class Board extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  switch (ownProps.title) {
-    case "Notice": 
-      return {
-        storedPosts: state.pt.noticePosts
-      };
-
-    case "Free": 
-      return {
-        storedPosts: state.pt.freePosts
-      };
-
-    default: 
-      break;
-  }
+  let boardtype = '' + ownProps.boardType;
+  boardtype = boardtype.toString().toLowerCase();
+  return {
+    storedPosts: state.pt[boardtype].posts
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  switch (ownProps.title) {
-    case "Notice": 
-      return {
-        onDeletePost: (id) => {dispatch({ type: actionTypes.DELETE_POST_NOTICE, targetID: id })},
-      };
-    
-    case "Free": 
-      return {
-        onDeletePost: (id) => {dispatch({ type: actionTypes.DELETE_POST_FREE, targetID: id })},
-      };
-    
-    default: break;
-  }
+  let boardtype = '' + ownProps.boardType;
+  boardtype = boardtype.toString().toLowerCase();
+  return {
+    onDeletePost: (id) => {dispatch({ type: actionTypes.DELETE_POST, targetID: id, boardType: boardtype })},
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Board));

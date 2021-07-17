@@ -16,16 +16,3 @@
   .Post .text:hover {
     color: skyblue;
   }
-  
-  .Post .done {
-    text-decoration: line-through;
-    color: #adb5bd;
-  }
-  
-  .Post .done-mark {
-    font-size: 1.5rem;
-    line-height: 1rem;
-    margin-left: 1rem;
-    color: skyblue;
-    font-weight: 800;
-  }

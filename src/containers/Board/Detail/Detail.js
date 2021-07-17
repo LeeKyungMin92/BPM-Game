@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 
 class Detail extends Component {
   componentDidMount() {
-    this.props.onGetPost(this.props.match.params.id);
+    this.props.onGetPost(parseInt(this.props.match.params.id));
   }
 
   render() {
@@ -66,11 +66,11 @@ const mapDispatchToProps = (dispatch) => {
 
   if (pathname.slice(1, 7) === 'notice') {
     return {
-      onGetPost: (id) => dispatch({ type: actionTypes.GET_POST_NOTICE, targetID: id }),
+      onGetPost: (id) => dispatch({ type: actionTypes.GET_POST, targetID: id, boardType: 'notice' }),
     };
   } else if (pathname.slice(1,5) === 'free') {
     return {
-      onGetPost: (id) => dispatch({ type: actionTypes.GET_POST_FREE, targetID: id }),
+      onGetPost: (id) => dispatch({ type: actionTypes.GET_POST, targetID: id, boardType: 'free' }),
     };
   }
 };

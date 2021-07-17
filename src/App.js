@@ -12,12 +12,12 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/home" exact render={() => <Home title="Home" />} />
-          <Route path='/notice' exact render={() => <Board title="Notice" />} />
-          <Route path="/notice/add" exact render={() => <AddPost title="Notice" />} />
+          <Route path='/notice' exact render={() => <Board boardType="Notice" />} />
+          <Route path="/notice/add" exact render={() => <AddPost boardType="Notice" />} />
           <Route path='/notice/:id' exact component={Detail} />
-          <Route path="/free" exact render={() => <Board title="Free" />} />
-          <Route path="/free/add" exact render={() => <AddPost title="Free" />} />
-          <Route path="/free/:id" exact render={() => <Detail title="Free" />} />
+          <Route path="/free" exact render={() => <Board boardType="Free" />} />
+          <Route path="/free/add" exact render={() => <AddPost boardType="Free" />} />
+          <Route path="/free/:id" exact component={Detail} />
           <Redirect exact from="/" to="/home" />
           <Route render={() => <h1>Not Found</h1>} />
         </Switch>

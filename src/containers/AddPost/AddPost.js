@@ -5,20 +5,11 @@ import './AddPost.css';
 import * as actionTypes from '../../store/actions/actionTypes';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  switch (ownProps.title) {
-    case "Notice": 
-      return {
-        onStorePost: (title, content) => dispatch({ type: actionTypes.ADD_POST_NOTICE, title: title, content: content})
-      };
-      
-    case "Free": 
-      return {
-        onStorePost: (title, content) => dispatch({ type: actionTypes.ADD_POST_FREE, title: title, content: content})
-      };
-            
-    default: 
-        break;
-  }
+  let boardtype = '' + ownProps.boardType;
+  boardtype = boardtype.toString().toLowerCase();
+  return {
+    onStorePost: (title, content) => dispatch({ type: actionTypes.ADD_POST, title: title, content: content, boardType: boardtype })
+  };
 };
 
 class AddPost extends Component {
@@ -45,7 +36,7 @@ class AddPost extends Component {
         }
         return (
             <div className='AddPost'>
-                <h1>Add a {this.props.title}</h1>
+                <h1>Add a {this.props.boardType}</h1>
                 <label>Title</label>
                 <input type='text' value={this.state.title} onChange={(event) => this.setState({title: event.target.value})} />
                 <label>Content</label>

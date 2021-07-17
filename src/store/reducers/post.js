@@ -1,56 +1,48 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  noticePosts: [
-    { id: 1, title: 'Welcome!', content: 'Welcome to my page' },
-    { id: 2, title: 'Rules', content: 'Swing your body round and round.' },
-    { id: 3, title: 'Today\'s dinner', content: 'Today\'s dinner is chicken.' },
-  ],
-  nextNotice: 4,
-  freePosts: [
-    { id: 1, title: '( ՞⌓°⎞', content: 'a?' },
-    { id: 2, title: 'INN', content: 'INN' },
-    { id: 3, title: 'I want to travel overseas', content: 'But I can\'t.' },
-  ],
-  nextFree: 4,
+  notice: {
+    nextIdx: 4,
+    posts: [
+      { id: 1, title: 'Welcome!', content: 'Welcome to my page' },
+      { id: 2, title: 'Rules', content: 'Swing your body round and round.' },
+      { id: 3, title: 'Today\'s dinner', content: 'Today\'s dinner is chicken.' },
+    ]
+  },
+  free: {
+    nextIdx: 4,
+    posts: [
+      { id: 1, title: '( ՞⌓°⎞', content: 'a?' },
+      { id: 2, title: 'INN', content: 'INN' },
+      { id: 3, title: 'I want to travel overseas', content: 'But I can\'t.' },
+    ]
+  },
   selectedPost: null,
 };
 
 const reducer = (state = initialState, action) => {
+  let ret;
   switch (action.type) {
-    case actionTypes.ADD_POST_NOTICE: 
-      const newNotice = {
-        id: state.nextNotice,
+    case actionTypes.ADD_POST: 
+      const newPost = {
+        id: state[action.boardType].nextIdx,
         title: action.title,
         content: action.content,
       };
-      state.nextNotice += 1;
-      return { ...state, noticePosts: state.noticePosts.concat(newNotice) };
+      state[action.boardType].nextIdx += 1;
+      ret = {...state};
+      ret[action.boardType].posts = ret[action.boardType].posts.concat(newPost);
+      return ret;
     
-    case actionTypes.ADD_POST_FREE: 
-      const newFree = {
-        id: state.nextFree,
-        title: action.title,
-        content: action.content,
-      };
-      state.nextFree += 1;
-      return { ...state, freePosts: state.freePosts.concat(newFree) };
-    
-    case actionTypes.DELETE_POST_NOTICE: 
-      const deletedNotice = state.noticePosts.filter((post) => post.id !== action.targetID);
-      return { ...state, noticePosts: deletedNotice };
+    case actionTypes.DELETE_POST: 
+      const deletedPost = state[action.boardType].posts.filter((post) => post.id !== action.targetID);
+      ret = {...state};
+      ret[action.boardType].posts = deletedPost;
+      return ret;
 
-    case actionTypes.DELETE_POST_FREE: 
-      const deletedFree = state.freePosts.filter((post) => post.id !== action.targetID);
-      return { ...state, freePosts: deletedFree };
-
-    case actionTypes.GET_POST_NOTICE: 
-      const targetNotice = { ...state.noticePosts.find((post) => post.id == action.targetID) };
-      return { ...state, selectedPost: targetNotice };
-
-    case actionTypes.GET_POST_FREE: 
-      const targetFree = { ...state.freePosts.find((post) => post.id == action.targetID) };
-      return { ...state, selectedPost: targetFree };
+    case actionTypes.GET_POST: 
+      const targetPost = { ...state[action.boardType].posts.find((post) => post.id === action.targetID) };
+      return { ...state, selectedPost: targetPost };
 
     default:
       break;

@@ -1,8 +1,4 @@
-export const GET_ALL_NOTICE = 'GET_ALL_NOTICE';
-export const GET_POST_NOTICE = 'GET_POST_NOTICE';
-export const DELETE_POST_NOTICE = 'DELETE_POST_NOTICE';
-export const ADD_POST_NOTICE = 'ADD_POST_NOTICE';
-export const GET_ALL_FREE = 'GET_ALL_FREE';
-export const GET_POST_FREE = 'GET_POST_FREE';
-export const DELETE_POST_FREE = 'DELETE_POST_FREE';
-export const ADD_POST_FREE = 'ADD_POST_FREE';
+export const GET_ALL = 'GET_ALL';
+export const GET_POST = 'GET_POST';
+export const DELETE_POST = 'DELETE_POST';
+export const ADD_POST = 'ADD_POST';
