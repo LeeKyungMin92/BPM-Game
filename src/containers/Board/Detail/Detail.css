@@ -1,0 +1,15 @@
+.Detail .row {
+    display: flex;
+    padding: 20px;
+    height: 30px;
+    text-align: left;
+  }
+  
+  .Detail .left {
+    font-weight: bold;
+    flex: 25%
+  }
+  
+  .Detail .right {
+    flex: 75%;
+  }
