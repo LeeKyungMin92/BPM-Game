@@ -62,17 +62,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  let pathname = window.location.pathname;
-
-  if (pathname.slice(1, 7) === 'notice') {
-    return {
-      onGetPost: (id) => dispatch({ type: actionTypes.GET_POST, targetID: id, boardType: 'notice' }),
-    };
-  } else if (pathname.slice(1,5) === 'free') {
-    return {
-      onGetPost: (id) => dispatch({ type: actionTypes.GET_POST, targetID: id, boardType: 'free' }),
-    };
-  }
+  let pathname = window.location.pathname.toString().split('/')[1];
+  return {
+    onGetPost: (id) => dispatch({ type: actionTypes.GET_POST, targetID: id, boardType: pathname }),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Detail));
