@@ -28,7 +28,7 @@ const reducer = (state = initialState, action) => {
       return ret;
     
     case actionTypes.DELETE_POST: 
-      const deletedPost = state[action.boardType].filter((post) => post.id !== action.targetID);
+      const deletedPost = state[action.boardType].filter((post) => post.id !== action.targetId);
       ret = {...state};
       ret[action.boardType] = deletedPost;
       return ret;
