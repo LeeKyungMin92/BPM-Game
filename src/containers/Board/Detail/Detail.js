@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './Detail.css';
-import * as actionTypes from '../../../store/actions/actionTypes';
 import { withRouter } from 'react-router';
+import { NavLink } from 'react-router-dom';
+import './Detail.css';
+import * as actionCreators from '../../../store/actions/index';
 
 class Detail extends Component {
   componentDidMount() {
@@ -26,6 +27,13 @@ class Detail extends Component {
         );
     }
 
+    let prevPath = window.location.pathname;
+    if (prevPath.charAt(prevPath.length - 1) === '/') {
+      prevPath = prevPath.slice(0, -(id.toString().length + 2));
+    } else {
+      prevPath = prevPath.slice(0, -(id.toString().length + 1));
+    }
+    
     return (
       <div className='Detail'>
         <div className='row'>
@@ -52,6 +60,11 @@ class Detail extends Component {
             {content}
           </div>
         </div>
+        <div className='row'>
+          <div className='left'>
+            <NavLink to={prevPath} exact>Back</NavLink>
+          </div>
+        </div>
       </div>
     );
   }
@@ -62,9 +75,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  let pathname = window.location.pathname.toString().split('/')[1];
+  let prevPath = window.location.pathname.toString().split('/')[1];
   return {
-    onGetPost: (id) => dispatch({ type: actionTypes.GET_POST, targetID: id, boardType: pathname }),
+    onGetPost: (id) => dispatch(actionCreators.getPost(prevPath, id)),
   };
 };
 
