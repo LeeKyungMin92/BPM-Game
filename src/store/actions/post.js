@@ -27,7 +27,7 @@ export const postPost = (boardType, pt) => {
   return (dispatch) => {
     return axios.post('/api/' + boardType + '/', pt)
       .then(res => dispatch(postPost_(boardType, res.data)))
-      .then(() => dispatch(push('/' + boardType)));
+      .then(() => dispatch(push('/' + boardType + '/')));
   };
 };
 
@@ -41,7 +41,7 @@ export const deletePost_ = (boardType, id) => {
 
 export const deletePost = (boardType, id) => {
   return (dispatch) => {
-    return axios.delete('/api/' + boardType + '/' + id)
+    return axios.delete('/api/' + boardType + '/' + id + '/')
       .then(res => {
         dispatch(deletePost_(boardType, id));
       });
@@ -57,7 +57,7 @@ export const getPost_ = (post) => {
 
 export const getPost = (boardType, id) => {
   return (dispatch) => {
-    return axios.get('/api/' + boardType + '/' + id)
+    return axios.get('/api/' + boardType + '/' + id + '/')
       .then(res => {
         dispatch(getPost_(res.data));
       });

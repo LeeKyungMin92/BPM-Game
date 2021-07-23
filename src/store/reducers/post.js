@@ -1,16 +1,8 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  notice: [
-    { id: 1, title: 'Welcome!', content: 'Welcome to my page' },
-    { id: 2, title: 'Rules', content: 'Swing your body round and round.' },
-    { id: 3, title: 'Today\'s dinner', content: 'Today\'s dinner is chicken.' },
-  ],
-  free: [
-    { id: 1, title: '( ՞⌓°⎞', content: 'a?' },
-    { id: 2, title: 'INN', content: 'INN' },
-    { id: 3, title: 'I want to travel overseas', content: 'But I can\'t.' },
-  ],
+  notice: [],
+  free: [],
   selectedPost: null,
 };
 

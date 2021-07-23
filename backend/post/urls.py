@@ -5,5 +5,5 @@ from . import views
 
 urlpatterns = [
   path('<str:boardType>/', views.index),
-  path('<str:boardType>/<int:id>', views.index),
+  path('<str:boardType>/<int:id>/', views.manage_post),
 ]

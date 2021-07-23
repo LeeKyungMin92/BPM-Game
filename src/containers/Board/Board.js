@@ -18,7 +18,7 @@ class Board extends Component {
   clickPostHandler = (pt) => {
     let boardtype = '' + this.props.boardType;
     boardtype = boardtype.toString().toLowerCase();
-    this.props.history.push(boardtype + '/' + pt.id);
+    this.props.history.push('/' + boardtype + '/' + pt.id);
   }
 
   render() {
