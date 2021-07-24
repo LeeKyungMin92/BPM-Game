@@ -8,7 +8,7 @@ import json
 from .models import Notice, Free
 
 @csrf_exempt
-def index(request, boardType=''):
+def manage_post(request, boardType=''):
   if boardType == 'notice': 
     board = Notice
   elif boardType == 'free': 
@@ -39,7 +39,7 @@ def index(request, boardType=''):
     return HttpResponseNotAllowed(['GET', 'POST'])
 
 @csrf_exempt
-def manage_post(request, boardType='', id=None):
+def manage_post_id(request, boardType='', id=None):
   if boardType == 'notice': 
     board = Notice
   elif boardType == 'free': 
