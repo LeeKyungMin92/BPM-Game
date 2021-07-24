@@ -1,14 +1,15 @@
 import React from 'react';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import './App.css';
 import Home from './containers/Home/Home';
 import Board from './containers/Board/Board';
 import AddPost from './containers/AddPost/AddPost';
 import Detail from './containers/Board/Detail/Detail';
 
-function App() {
+function App(props) {
   return (
-    <BrowserRouter>
+    <ConnectedRouter history={props.history}>
       <div className="App">
         <Switch>
           <Route path="/home" exact render={() => <Home title="Home" />} />
@@ -22,7 +23,7 @@ function App() {
           <Route render={() => <h1>Not Found</h1>} />
         </Switch>
       </div>
-    </BrowserRouter>
+    </ConnectedRouter>
   );
 }
 

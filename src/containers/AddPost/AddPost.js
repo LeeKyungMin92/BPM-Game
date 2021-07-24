@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import './AddPost.css';
-import * as actionTypes from '../../store/actions/actionTypes';
+import * as actionCreators from '../../store/actions/index';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   let boardtype = '' + ownProps.boardType;
   boardtype = boardtype.toString().toLowerCase();
   return {
-    onStorePost: (title, content) => dispatch({ type: actionTypes.ADD_POST, title: title, content: content, boardType: boardtype })
+    onStorePost: (title, content) => dispatch(actionCreators.postPost(boardtype, {title: title, content: content}))
   };
 };
 

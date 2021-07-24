@@ -4,17 +4,21 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import './Board.css';
 import Post from '../../components/Post/Post';
-import * as actionTypes from '../../store/actions/actionTypes';
+import * as actionCreators from '../../store/actions/index';
 
 class Board extends Component {
   state = {
       selectedPost: null,
   }
+
+  componentDidMount() {
+    this.props.onGetAll();
+  }
   
   clickPostHandler = (pt) => {
     let boardtype = '' + this.props.boardType;
     boardtype = boardtype.toString().toLowerCase();
-    this.props.history.push(boardtype + '/' + pt.id);
+    this.props.history.push('/' + boardtype + '/' + pt.id);
   }
 
   render() {
@@ -26,12 +30,16 @@ class Board extends Component {
       );
     });
 
+    let currentPath = window.location.pathname;
+    if (currentPath.charAt(currentPath.length - 1) === '/') {
+      currentPath = currentPath.slice(0, -1);
+    }
     return (
       <div className='Board'>
         <div className='boardType'>{this.props.boardType}</div>
         <div className='Posts'>{posts}</div>
         <div className='add'>
-          <NavLink to={window.location.pathname + '/add'} exact>Add {this.props.boardType}</NavLink>
+          <NavLink to={currentPath + '/add'} exact>Add {this.props.boardType}</NavLink>
         </div>
         <div className='home'>
           <NavLink to='/home' exact>Back</NavLink>
@@ -45,7 +53,7 @@ const mapStateToProps = (state, ownProps) => {
   let boardtype = '' + ownProps.boardType;
   boardtype = boardtype.toString().toLowerCase();
   return {
-    storedPosts: state.pt[boardtype].posts
+    storedPosts: state.pt[boardtype]
   };
 };
 
@@ -53,7 +61,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   let boardtype = '' + ownProps.boardType;
   boardtype = boardtype.toString().toLowerCase();
   return {
-    onDeletePost: (id) => {dispatch({ type: actionTypes.DELETE_POST, targetID: id, boardType: boardtype })},
+    onDeletePost: (id) => {dispatch(actionCreators.deletePost(boardtype, id))},
+    onGetAll: () => dispatch(actionCreators.getPosts(boardtype)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Board));
