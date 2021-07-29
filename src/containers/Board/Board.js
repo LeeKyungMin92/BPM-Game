@@ -30,10 +30,7 @@ class Board extends Component {
       );
     });
 
-    let currentPath = window.location.pathname;
-    if (currentPath.charAt(currentPath.length - 1) === '/') {
-      currentPath = currentPath.slice(0, -1);
-    }
+    let currentPath = window.location.pathname.toString().split('/')[1];
     return (
       <div className='Board'>
         <div className='boardType'>{this.props.boardType}</div>

@@ -4,10 +4,10 @@ import './Post.css';
 const Post = (props) => {
     return (
         <div className='Post'>
-            <div className='name' onClick={props.clickDetail}>
+            <div className='text' onClick={props.clickDetail}>
                 {props.title}
             </div>
-            <button onClick={props.clickDelete}>Delete</button>
+            <button className='btn' onClick={props.clickDelete}>Delete</button>
         </div>
     );
 }
