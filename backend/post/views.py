@@ -1,4 +1,5 @@
 from json.decoder import JSONDecodeError
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse, response
 from django.views.decorators.csrf import csrf_exempt
@@ -7,12 +8,14 @@ import json
 
 from .models import Notice, Free
 
+
+boards = {'notice': Notice, 'free': Free}
+
+
 @csrf_exempt
-def manage_post(request, boardType=''):
-  if boardType == 'notice': 
-    board = Notice
-  elif boardType == 'free': 
-    board = Free
+def manage_post(request, boardType):
+  if boardType in boards: 
+    board = boards[boardType]
   else:
     return HttpResponseBadRequest('Invalid board name.')
 
@@ -38,36 +41,31 @@ def manage_post(request, boardType=''):
   else:
     return HttpResponseNotAllowed(['GET', 'POST'])
 
+
 @csrf_exempt
-def manage_post_id(request, boardType='', id=None):
-  if boardType == 'notice': 
-    board = Notice
-  elif boardType == 'free': 
-    board = Free
+def manage_post_id(request, boardType, id):
+  if boardType in boards: 
+    board = boards[boardType]
   else:
     return HttpResponseBadRequest('Invalid board name.')
 
   if request.method == 'GET':
-    if id is None:
-      return HttpResponseBadRequest('PostID is not specified.')
-    else:
-      try:
-        post = board.objects.get(id=id)
-        response_dict = {
-          'id': post.id,
-          'title': post.title,
-          'content': post.content,
-        }
-        return JsonResponse(response_dict, safe=False)
-      except KeyError as e:
-        return HttpResponseBadRequest('PostID does not exist: {}'.format(id))
+    try:
+      post = board.objects.get(id=id)
+      response_dict = {
+        'id': post.id,
+        'title': post.title,
+        'content': post.content,
+      }
+      print(post)
+    except ObjectDoesNotExist as e:
+      return HttpResponseBadRequest('PostID does not exist: {}'.format(id))  
+    return JsonResponse(response_dict, safe=False)
   elif request.method == 'DELETE':
-    if id is None:
-      return HttpResponseBadRequest('PostID is not specified.')
     try:
       post = board.objects.get(id=id)
       post.delete()
-    except KeyError as e:
+    except ObjectDoesNotExist as e:
       return HttpResponseBadRequest('PostID does not exist: {}'.format(id))
     return HttpResponse(status=204)
   else:

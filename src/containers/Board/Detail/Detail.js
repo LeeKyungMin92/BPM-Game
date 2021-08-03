@@ -18,7 +18,7 @@ class Detail extends Component {
       content = this.props.selectedPost.content;
     }
     
-    if (!id) {
+    if (id == null) {
       return (
         <div className='NotFound'>
           <h1>Not Found</h1>
@@ -27,12 +27,7 @@ class Detail extends Component {
         );
     }
 
-    let prevPath = window.location.pathname;
-    if (prevPath.charAt(prevPath.length - 1) === '/') {
-      prevPath = prevPath.slice(0, -(id.toString().length + 2));
-    } else {
-      prevPath = prevPath.slice(0, -(id.toString().length + 1));
-    }
+    let prevPath = window.location.pathname.toString().split('/')[1];
     
     return (
       <div className='Detail'>

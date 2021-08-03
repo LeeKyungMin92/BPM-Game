@@ -16,3 +16,10 @@
   .Post .text:hover {
     color: skyblue;
   }
+  
+  .Post .btn {
+    line-height: 1rem;
+    margin-left: 1rem;
+    font-weight: 800;
+    color: #610000;
+  }

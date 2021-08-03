@@ -27,12 +27,8 @@ class AddPost extends Component {
 
     render() {
         if(this.state.submitted) {
-          let pathname = window.location.pathname;
-          if (pathname.charAt(pathname.length - 1) === '/') {
-            return <Redirect to={pathname.slice(0, -5)} />;
-          } else {
-            return <Redirect to={pathname.slice(0, -4)} />;
-          }
+          let pathname = window.location.pathname.toString().split('/')[1];
+          return <Redirect to={pathname} />;
         }
         return (
             <div className='AddPost'>

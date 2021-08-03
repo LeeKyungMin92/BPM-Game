@@ -3,7 +3,10 @@ import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
 export const getPosts_ = (boardType, posts) => {
-  return { type: actionTypes.GET_ALL,boardType: boardType, posts: posts };
+  return { 
+    type: actionTypes.GET_ALL,
+    boardType: boardType, 
+    posts: posts };
 };
 
 export const getPosts = (boardType) => {
@@ -42,9 +45,7 @@ export const deletePost_ = (boardType, id) => {
 export const deletePost = (boardType, id) => {
   return (dispatch) => {
     return axios.delete('/api/' + boardType + '/' + id + '/')
-      .then(res => {
-        dispatch(deletePost_(boardType, id));
-      });
+      .then(res => dispatch(deletePost_(boardType, id)));
   };
 };
 
@@ -58,8 +59,6 @@ export const getPost_ = (post) => {
 export const getPost = (boardType, id) => {
   return (dispatch) => {
     return axios.get('/api/' + boardType + '/' + id + '/')
-      .then(res => {
-        dispatch(getPost_(res.data));
-      });
+      .then(res => dispatch(getPost_(res.data)));
   };
 };
