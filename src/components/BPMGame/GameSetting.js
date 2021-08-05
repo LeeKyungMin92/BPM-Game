@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown } from 'react-dropdown-now';
 import 'react-dropdown-now/style.css';
 import { Redirect } from 'react-router';
-import './Style.css'
+import './Style.css';
 
 class GameSetting extends Component {
   state = {
@@ -17,7 +17,7 @@ class GameSetting extends Component {
       this.setState({alarm: "Please select your BPM!", toggleAlarm: true});
     }
     else {
-      this.props.setState({bpm: this.state.bpm, page: 2});
+      this.props.setState((prevState) => ({bpm: this.state.bpm, page: 2}));
     }
   }
   

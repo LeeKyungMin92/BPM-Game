@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'react-dropdown-now/style.css';
 import { Redirect } from 'react-router';
-import './Style.css'
+import './Style.css';
 
 class GameResult extends Component {
   state = {

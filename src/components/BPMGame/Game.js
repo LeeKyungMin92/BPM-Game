@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import './Style.css'
+import './Style.css';
 
 class Game extends Component {
   state = {
@@ -13,6 +13,9 @@ class Game extends Component {
     toggleHome: false,
   }
   
+  count = 0;
+  
+  
   TapHandler = () => {
     let currentTime = Date.now()
     if (this.state.count !== 0) {
@@ -24,21 +27,23 @@ class Game extends Component {
     }
     if (this.state.count === 7) {
       this.setState({description: "Keep tapping..."});
+      this.props.setState({toggleFadeOut: true});
     }
     if (this.state.count >= 23) {
-      this.setState({description: (31 - this.state.count) + " times remaining..."});
+      this.setState((prevState) => ({description: (31 - prevState.count) + " times remaining..."}));
     }
     if (this.state.count === 31) {
-      this.props.setState({accuracy: this.state.accuracy, page: 3});
+      this.props.setState({accuracy: this.state.accuracy, page: 3, toggleFadeOut: false});
     }
-    this.setState({count: this.state.count + 1, previousTime: currentTime});
+    this.setState((prevState) => ({count: prevState.count + 1, previousTime: currentTime}));
   }
   
   clickBackHandler = () => {
-    this.props.setState({page: 1});
+    this.props.setState({bpm: null, accuracy: null, page: 1, toggleFadeOut: false});
   }
   
   clickHomeHandler = () => {
+    clearInterval(this.props.setInterval);
     this.setState({toggleHome: true});
   }
 
@@ -46,6 +51,7 @@ class Game extends Component {
     if (this.state.toggleHome) {
       return <Redirect to="home" />;
     }
+
     var accText;
     if (this.state.count >= 2) {
       accText = "Accuracy: " + this.state.accuracy.toFixed(5) + "%";
@@ -53,6 +59,7 @@ class Game extends Component {
     else {
       accText = "Tap here!"
     }
+
     return (
       <div>
         <div className='Title'>
