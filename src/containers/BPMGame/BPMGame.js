@@ -14,26 +14,21 @@ class BPMGame extends Component {
   state = {
     bpm: null,
     accuracy: null,
-    page: 1,
+    pageNum: 1,
     toggleFadeOut: false,
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !(this.state.toggleFadeOut !== nextState.toggleFadeOut && !this.state.toggleFadeOut);
+    return (this.state.toggleFadeOut || !nextState.toggleFadeOut);
   }
   
   count = 0;
   vol = 1;
   render() {
+    const audios = [new Audio(PulseUp), new Audio(Pulse), new Audio(Pulse), new Audio(Pulse)];
     var playSound = setInterval(() => {
-      if (this.state.page === 2) {
-        if (this.count === 0) {
-          this.audio = new Audio(PulseUp);
-        }
-        else {
-         this.audio = new Audio(Pulse);
-        }
-        this.audio.play();
+      if (this.state.pageNum === 2) {
+        audios[this.count].play();
         
         if (this.count === 3) {
           this.count = 0;
@@ -44,15 +39,15 @@ class BPMGame extends Component {
 
         if (this.state.toggleFadeOut) {
           this.vol -= 0.2
-          this.audio.volume = this.vol;
-          if (this.audio.volume < 0.2) {
+          audios[this.count].volume = this.vol;
+          if (audios[this.count].volume < 0.2) {
             clearInterval(playSound);
             return;
           }
         }
         else {
           this.vol = 1;
-          this.audio.volume = 1;
+          audios[this.count].volume = 1;
         }
       }
       else {
@@ -62,7 +57,7 @@ class BPMGame extends Component {
     }, 60000 / this.state.bpm);
 
     var currentPage;
-    switch (this.state.page) {
+    switch (this.state.pageNum) {
       case 1:
         this.count = 0;
         currentPage = (
@@ -90,6 +85,7 @@ class BPMGame extends Component {
       <div className="BPMGame">
         {currentPage}
       </div>
+      
     );
   }
 }

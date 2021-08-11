@@ -9,7 +9,7 @@ class GameResult extends Component {
   }
   
   clickRestartHandler = () => {
-    this.props.setState({bpm: null, accuracy: null, page: 1});
+    this.props.setState({bpm: null, pageNum: 1, accuracy: null});
   }
   
   clickHomeHandler = () => {

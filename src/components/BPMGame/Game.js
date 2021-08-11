@@ -15,8 +15,8 @@ class Game extends Component {
   
   count = 0;
   
-  
   TapHandler = () => {
+    console.log(this.state.count);
     let currentTime = Date.now()
     if (this.state.count !== 0) {
       let itv = currentTime - this.state.previousTime;
@@ -33,18 +33,21 @@ class Game extends Component {
       this.setState((prevState) => ({description: (31 - prevState.count) + " times remaining..."}));
     }
     if (this.state.count === 31) {
-      this.props.setState({accuracy: this.state.accuracy, page: 3, toggleFadeOut: false});
+      this.props.setState({accuracy: this.state.accuracy, pageNum: 3, toggleFadeOut: false});
     }
     this.setState((prevState) => ({count: prevState.count + 1, previousTime: currentTime}));
   }
   
   clickBackHandler = () => {
-    this.props.setState({bpm: null, accuracy: null, page: 1, toggleFadeOut: false});
+    this.props.setState({bpm: null, accuracy: null, pageNum: 1, toggleFadeOut: false});
   }
   
   clickHomeHandler = () => {
-    clearInterval(this.props.setInterval);
     this.setState({toggleHome: true});
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.props.setInterval);
   }
 
   render() {

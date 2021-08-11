@@ -17,7 +17,7 @@ class GameSetting extends Component {
       this.setState({alarm: "Please select your BPM!", toggleAlarm: true});
     }
     else {
-      this.props.setState((prevState) => ({bpm: this.state.bpm, page: 2}));
+      this.props.setState((prevState) => ({bpm: this.state.bpm, pageNum: 2}));
     }
   }
   
