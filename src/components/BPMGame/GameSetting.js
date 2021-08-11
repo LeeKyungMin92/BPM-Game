@@ -14,10 +14,10 @@ class GameSetting extends Component {
   
   clickStartHandler = () => {
     if (this.state.bpm === null) {
-      this.setState({alarm: "Please select your BPM!", toggleAlarm: true});
+      this.setState({ alarm: "Please select your BPM!", toggleAlarm: true });
     }
     else {
-      this.props.setState((prevState) => ({bpm: this.state.bpm, pageNum: 2}));
+      this.props.setState((prevState) => ({ bpm: this.state.bpm, pageNum: 2 }));
     }
   }
   
@@ -43,9 +43,9 @@ class GameSetting extends Component {
           <Dropdown
             placeholder="Select BPM..."
             options={options}
-            onChange={(selected) => this.setState({bpm: selected.value})}
-            onSelect={(selected) => this.setState({bpm: selected.value})}
-            onClose={() => this.setState({alarm: "", toggleAlarm: false})}
+            onChange={(selected) => this.setState({ bpm: selected.value })}
+            onSelect={(selected) => this.setState({ bpm: selected.value })}
+            onClose={() => this.setState({ alarm: "", toggleAlarm: false })}
           />
         </div>
         <div className={this.state.toggleAlarm ? 'Alarm' : 'NoAlarm'}>

@@ -3,11 +3,13 @@ import thunk from 'redux-thunk';
 import { connectRouter, routerMiddleware } from 'connected-react-router';       
 import { createBrowserHistory } from 'history';                                 
 
-import postReducer from './reducers/post';                                      
+import postReducer from './reducers/post';
+import bpmReducer from './reducers/bpm';                                      
 
 export const history = createBrowserHistory();                                  
 const rootReducer = combineReducers({                                           
-  pt: postReducer,                                                              
+  pt: postReducer,    
+  ac: bpmReducer,                                                          
   router: connectRouter(history),                                               
 });
 export const middlewares = [thunk, routerMiddleware(history)]

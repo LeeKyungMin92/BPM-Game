@@ -14,6 +14,8 @@ class BPMGame extends Component {
   state = {
     bpm: null,
     accuracy: null,
+    index: null,
+    ranking: null,
     pageNum: 1,
     toggleFadeOut: false,
   }
@@ -68,13 +70,24 @@ class BPMGame extends Component {
       case 2:
         currentPage = (
           // interval: time interval of 1/4 note at current bpm as ms
-          <Game bpm={this.state.bpm} interval={60000 / this.state.bpm} setInterval={playSound} setState={p => this.setState(p)} />
+          <Game 
+            bpm={this.state.bpm} 
+            interval={60000 / this.state.bpm} 
+            setInterval={playSound} 
+            setState={p => this.setState(p)} 
+          />
         );
         break;
 
       case 3:
         currentPage = (
-          <GameResult bpm={this.state.bpm} accuracy={this.state.accuracy} setState={p => this.setState(p)} />
+          <GameResult 
+            bpm={this.state.bpm} 
+            accuracy={this.state.accuracy} 
+            index={this.state.index} 
+            ranking={this.state.ranking} 
+            setState={p => this.setState(p)} 
+          />
         )
         break;
 
