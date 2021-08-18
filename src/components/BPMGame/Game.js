@@ -3,21 +3,24 @@ import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import './Style.css';
 import * as actionCreators from '../../store/actions/index';
+import * as actionTypes from '../../store/actions/actionTypes';
+import * as Pulse from '../../components/BPMGame/Sounds/pulse.flac';
+import * as PulseUp from '../../components/BPMGame/Sounds/pulseUp.flac';
+//import * as WoodBlock from '../../components/BPMGame/Sounds/woodblock.wav';
+//import * as WoodBlockUp from '../../components/BPMGame/Sounds/woodblockUp.wav';
 
 class Game extends Component {
   state = {
-    title: "Listen, and keep the beat!",
-    description: "Tap by left-clicking or spacebar.",
-    count: 0,
-    sum: 0,
-    accuracy: null,
-    index: null,
-    previousTime: null,
     toggleHome: false,
   }
   
-  count = 0;
-  
+  tapCount = 0;
+  sum = 0;
+  accuracy = null;
+  index = null;
+  previousTime = null;
+  toggleFadeOut = false;
+
   TapHandler = () => {
     const searchPosition = (arr, target) => {
       if (arr.length === 0) { return 0; }
@@ -34,71 +37,73 @@ class Game extends Component {
     }
 
     let currentTime = Date.now()
-    if (this.state.count !== 0) {
-      let itv = currentTime - this.state.previousTime;
-      let currentAcc = 1 - Math.min(Math.abs(itv / this.props.interval - 1), 1);
-      let sum = this.state.sum + currentAcc*100;
-      let acc = sum / this.state.count;
-      let index = searchPosition(this.props.storedRanking, acc);
-      this.setState({
-        sum: sum, 
-        accuracy: acc, 
-        index: index
-      });
+    const interval = 60000 / this.props.storedBPM;
+    if (this.tapCount !== 0) {
+      let itv = currentTime - this.previousTime;
+      let currentAcc = 1 - Math.min(Math.abs(itv / interval - 1), 1);
+      this.sum += currentAcc*100;
+      this.accuracy = this.sum / this.tapCount;
+      this.index = searchPosition(this.props.storedRanking, this.accuracy);
     }
-    if (this.state.count === 7) {
-      this.setState({description: "Keep tapping..."});
-      this.props.setState({toggleFadeOut: true});
+    if (this.tapCount === 7 & !this.toggleFadeOut) {
+      this.toggleFadeOut = true;
     }
-    if (this.state.count >= 23) {
-      this.setState((prevState) => ({description: (31 - prevState.count) + " times remaining..."}));
-    }
-    if (this.state.count === 31) {
+    else if (this.tapCount === 31) {
       var ranking;
       if (this.props.storedRanking.length === 0) {
         ranking = -1;
       }
       else {
-        if (this.state.index !== null) {
+        if (this.index !== null) {
           let tempTotal = this.props.storedRanking.length + 1;
-          ranking = (100 * (tempTotal - this.state.index) / tempTotal)
+          ranking = (100 * (tempTotal - this.index) / tempTotal)
         }
       }
-      this.props.setState({
-        accuracy: this.state.accuracy, 
-        index: this.state.index, 
-        ranking: ranking, 
-        pageNum: 3, 
-        toggleFadeOut: false
-      });
+      this.props.onSetAcc(this.accuracy, this.index, ranking);
+      this.props.setState({ gameFinished: true });
     }
-    console.log(this.state.index);
-    console.log(this.props.storedRanking);
-    this.setState((prevState) => ({
-      count: prevState.count + 1, 
-      previousTime: currentTime
-    }));
+    this.previousTime = currentTime;
+    this.tapCount += 1
+    this.forceUpdate();
   }
   
   clickBackHandler = () => {
-    this.props.setState({
-      bpm: null, 
-      accuracy: null, 
-      pageNum: 1, 
-      toggleFadeOut: false
-    });
+    this.props.onResetBPM();
+    this.props.setState({ gameStarted: false });
   }
   
   clickHomeHandler = () => {
+    this.props.onResetBPM();
     this.setState({ toggleHome: true });
   }
 
-  componentWillUnmount() {
-    clearInterval(this.props.setInterval);
+  componentDidMount() {
+    this.props.onGetAccs(this.props.storedBPM);
+
+    var count = 0;
+    var vol = 1;
+    const audios = [new Audio(PulseUp), new Audio(Pulse), new Audio(Pulse), new Audio(Pulse)];
+    this.playSound = setInterval(() => {
+      if (this.toggleFadeOut) {
+        vol = (vol < 0.2) ? 0 : vol - 0.2
+      }
+      else {
+        vol = 1;
+      }
+      audios[count].volume = vol;
+
+      audios[count].play();
+      if (count === 3) {
+        count = 0;
+      }
+      else {
+        count += 1;
+      }
+    }, 60000 / this.props.storedBPM);
   }
 
-  componentDidMount() {
-    this.props.onGetAccs();
+  componentWillUnmount() {
+    clearInterval(this.playSound);
   }
 
   render() {
@@ -107,8 +112,8 @@ class Game extends Component {
     }
 
     var accText;
-    if (this.state.count >= 2) {
-      accText = "Accuracy: " + this.state.accuracy.toFixed(5) + "%";
+    if (this.tapCount >= 2) {
+      accText = "Accuracy: " + this.accuracy.toFixed(5) + "%";
     }
     else {
       accText = "Tap here!"
@@ -119,22 +124,34 @@ class Game extends Component {
       rankingText = "You are the first player of this BPM!"
     }
     else {
-      if (this.state.index !== null) {
+      if (this.index !== null) {
         let tempTotal = this.props.storedRanking.length + 1;
-        rankingText = "You are " + (100 * (tempTotal - this.state.index) / tempTotal).toFixed(5) + "% high."
+        rankingText = "You are " + (100 * (tempTotal - this.index) / tempTotal).toFixed(5) + "% high."
       }
       else {
         rankingText = "Your ranking will be displayed here."
       }
     }
 
+    var title = "Listen, and keep the beat!";
+    var description;
+    if (this.tapCount < 8) {
+      description = "Tap by left-clicking or spacebar.";
+    }
+    else if (this.tapCount >= 8 && this.tapCount < 24) {
+      description = "Keep tapping...";
+    }
+    else {
+      description = (32 - this.tapCount) + " times remaining...";
+    }
+    
     return (
       <div>
         <div className='Title'>
-          <h1>{this.state.title}</h1>
+          <h1>{title}</h1>
         </div>
         <div className='Description'>
-          <h3>{this.state.description}</h3>
+          <h3>{description}</h3>
         </div>
         <div className='TapAreaContainer'>
           <button className='TapArea' onClick={this.TapHandler}>{accText}</button>
@@ -155,15 +172,16 @@ class Game extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    storedRanking: state.ac.ranking
+    storedRanking: state.ac.ranking,
+    storedBPM: state.bpm.bpm
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  let bpm = ownProps.bpm;
   return {
-    onGetAccs: () => dispatch(actionCreators.getAccs(bpm)),
+    onGetAccs: (bpm) => dispatch(actionCreators.getAccs(bpm)),
+    onSetAcc: (acc, idx, ran) => dispatch({ type: actionTypes.SET_ACC, accuracy: acc, index: idx, ranking: ran }),
+    onResetBPM: () => dispatch({ type: actionTypes.RESET_ACC_AND_BPM })
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
-//export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Game));

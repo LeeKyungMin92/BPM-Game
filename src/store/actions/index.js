@@ -8,4 +8,4 @@ export {
 export {
   getAccs,
   postAcc
-} from './bpm';
+} from './acc';

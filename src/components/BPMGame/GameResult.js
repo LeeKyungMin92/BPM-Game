@@ -4,11 +4,21 @@ import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import './Style.css';
 import * as actionCreators from '../../store/actions/index';
+import * as actionTypes from '../../store/actions/actionTypes';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  let bpm = ownProps.bpm;
   return {
-    onStoreAcc: (acc, index) => dispatch(actionCreators.postAcc(bpm, {accuracy: acc, index: index}))
+    onStoreAcc: (bpm, acc, index) => dispatch(actionCreators.postAcc(bpm, {accuracy: acc, index: index})),
+    onResetBPM: () => dispatch({ type: actionTypes.RESET_ACC_AND_BPM })
+  };
+};
+
+const mapStateToProps = (state) => {
+  return {
+    storedBPM: state.bpm.bpm,
+    storedAcc: state.bpm.accuracy,
+    storedIdx: state.bpm.index,
+    storedRan: state.bpm.ranking,
   };
 };
 
@@ -18,7 +28,7 @@ class GameResult extends Component {
   }
   
   clickRestartHandler = () => {
-    this.props.setState({bpm: null, pageNum: 1, accuracy: null});
+    this.props.setState({ gameStarted: false, gameFinished: false });
   }
   
   clickHomeHandler = () => {
@@ -26,7 +36,11 @@ class GameResult extends Component {
   }
 
   componentDidMount() {
-    this.props.onStoreAcc(this.props.accuracy, this.props.index);
+    this.props.onStoreAcc(this.props.storedBPM, this.props.storedAcc, this.props.storedIdx);
+  }
+
+  componentWillUnmount() {
+    this.props.onResetBPM();
   }
 
   render() {
@@ -34,23 +48,23 @@ class GameResult extends Component {
       return <Redirect to="home" />;
     }
     var rankingText;
-    if (this.props.ranking === -1) {
+    if (this.props.storedRan === -1) {
       rankingText = "You are the first player of this BPM!"
     }
     else {
-      rankingText = "Your accuracy is " + this.props.ranking.toFixed(5) + "% high.";
+      rankingText = "Your accuracy is " + this.props.storedRan.toFixed(5) + "% high.";
     }
 
     return (
       <div>
         <div className='Title'>
-          <h1>Result ({this.props.bpm}BPM)</h1>
+          <h1>Result ({this.props.storedBPM}BPM)</h1>
         </div>
         <div className='Description'>
           <h2>Your accuracy is...</h2>
         </div>
         <div className="Result">
-          <h1>{this.props.accuracy.toFixed(2)}%</h1>
+          <h1>{this.props.storedAcc.toFixed(2)}%</h1>
         </div>
         <div>
           <h3>{rankingText}</h3>
@@ -61,4 +75,4 @@ class GameResult extends Component {
     );
   }
 }
-export default connect(null, mapDispatchToProps)(GameResult);
+export default connect(mapStateToProps, mapDispatchToProps)(GameResult);

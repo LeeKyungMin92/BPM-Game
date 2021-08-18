@@ -2,7 +2,15 @@ import React, { Component } from 'react';
 import { Dropdown } from 'react-dropdown-now';
 import 'react-dropdown-now/style.css';
 import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
 import './Style.css';
+import * as actionTypes from '../../store/actions/actionTypes';
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onSetBPM: (bpm) => dispatch({ type: actionTypes.SET_BPM, bpm: bpm }),
+  };
+};
 
 class GameSetting extends Component {
   state = {
@@ -17,7 +25,8 @@ class GameSetting extends Component {
       this.setState({ alarm: "Please select your BPM!", toggleAlarm: true });
     }
     else {
-      this.props.setState((prevState) => ({ bpm: this.state.bpm, pageNum: 2 }));
+      this.props.onSetBPM(this.state.bpm);
+      this.props.setState(() => ({ gameStarted: true }));
     }
   }
   
@@ -57,4 +66,4 @@ class GameSetting extends Component {
     );
   }
 }
-export default GameSetting;
+export default connect(null, mapDispatchToProps)(GameSetting);
