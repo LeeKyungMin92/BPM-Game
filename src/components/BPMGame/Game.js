@@ -30,9 +30,10 @@ class Game extends Component {
       while (low <= high) {
         let mid = parseInt((low + high) / 2);
         if (arr[mid].accuracy === target) { return mid; }
-        else if (arr[mid].accuracy > target) { high = mid - 1; }
+        else if (arr[mid].accuracy < target) { high = mid - 1; }
         else { low = mid + 1; }
       }
+      console.log(low, arr);
       return low;
     }
 
@@ -55,8 +56,8 @@ class Game extends Component {
       }
       else {
         if (this.index !== null) {
-          let tempTotal = this.props.storedRanking.length + 1;
-          ranking = (100 * (tempTotal - this.index) / tempTotal)
+          let total = this.props.storedRanking.length;
+          ranking = (100 * this.index / total)
         }
       }
       this.props.onSetAcc(this.accuracy, this.index, ranking);
@@ -125,8 +126,8 @@ class Game extends Component {
     }
     else {
       if (this.index !== null) {
-        let tempTotal = this.props.storedRanking.length + 1;
-        rankingText = "You are " + (100 * (tempTotal - this.index) / tempTotal).toFixed(5) + "% high."
+        let total = this.props.storedRanking.length;
+        rankingText = "You are " + (100 * this.index / total).toFixed(5) + "% high."
       }
       else {
         rankingText = "Your ranking will be displayed here."
@@ -144,7 +145,7 @@ class Game extends Component {
     else {
       description = (32 - this.tapCount) + " times remaining...";
     }
-    
+
     return (
       <div>
         <div className='Title'>
